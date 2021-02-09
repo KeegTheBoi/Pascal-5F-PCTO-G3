@@ -51,16 +51,14 @@ namespace ServerGestioneMagazzino
         /// <summary>
         /// Il socket del server accetta una connessione dal client
         /// </summary>
-        public void Accept()
+        private void Accept()
         {
             //Esegue il ciclo mentre il server è attivo
             while (_onProcess)
             {                
                 Socket clientSock = Ascoltatore.Accept();
                 Client client = new Client(clientSock);
-                Thread clientThread = new Thread(client.Ricezione);
-                clientThread.Start();
-                _listaClientThread.Add(clientThread);                               
+                client.Ricezione();
             }
         }
 
@@ -74,6 +72,11 @@ namespace ServerGestioneMagazzino
                 t.Abort();
                 t.Join();
             }
+        }
+
+        public void Risposta(Client c)
+        {
+            string fileJSON = c.Messaggio;
         }
 
 

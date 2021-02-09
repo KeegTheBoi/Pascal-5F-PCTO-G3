@@ -20,14 +20,19 @@ namespace ServerGestioneMagazzino
 
         public void Ricezione()
         {
+
             string messaggio = "";
             byte[] buffer = new byte[1024];
-            if (Handler.Connected)
+            while (true)
             {
-                int nByte = Handler.Receive(buffer);
-                messaggio = Encoding.ASCII.GetString(buffer, 0, nByte);
+                if (Handler.Connected)
+                {
+                    int nByte = Handler.Receive(buffer);
+                    messaggio = Encoding.ASCII.GetString(buffer, 0, nByte);
+                }
+                Messaggio = messaggio;
             }
-            Messaggio = messaggio;
+            
         }
     }
 }
