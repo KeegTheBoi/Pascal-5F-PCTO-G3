@@ -60,8 +60,6 @@
     </ApplicationDefinition>
     <Compile Include="Client.cs" />
     <Compile Include="Prodotto.cs" />
-    <Compile Include="Ricezione.cs" />
-    <Compile Include="Risposta.cs" />
     <Compile Include="Server.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

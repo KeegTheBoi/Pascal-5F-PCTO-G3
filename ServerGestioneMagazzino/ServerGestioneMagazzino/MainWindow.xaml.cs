@@ -37,10 +37,7 @@ namespace ServerGestioneMagazzino
             Server s = new Server(22, ipAddress);
             s.Initialize();
             s.StartListening();
-
-            
-            
-           
+          
            
         }
     }

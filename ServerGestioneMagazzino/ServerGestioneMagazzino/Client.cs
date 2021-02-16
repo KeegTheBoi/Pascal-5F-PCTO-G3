@@ -23,15 +23,14 @@ namespace ServerGestioneMagazzino
 
             string messaggio = "";
             byte[] buffer = new byte[1024];
-            while (true)
+           
+            if (Handler.Connected)
             {
-                if (Handler.Connected)
-                {
-                    int nByte = Handler.Receive(buffer);
-                    messaggio = Encoding.ASCII.GetString(buffer, 0, nByte);
-                }
-                Messaggio = messaggio;
+                int nByte = Handler.Receive(buffer);
+                messaggio = Encoding.ASCII.GetString(buffer, 0, nByte);
             }
+            Messaggio = messaggio;
+            
             
         }
     }

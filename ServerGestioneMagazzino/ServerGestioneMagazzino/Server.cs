@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ServerGestioneMagazzino
 {
@@ -59,6 +61,7 @@ namespace ServerGestioneMagazzino
                 Socket clientSock = Ascoltatore.Accept();
                 Client client = new Client(clientSock);
                 client.Ricezione();
+                Ricezione(client);
             }
         }
 
@@ -74,9 +77,20 @@ namespace ServerGestioneMagazzino
             }
         }
 
-        public void Risposta(Client c)
+        public void Ricezione(Client c)
         {
             string fileJSON = c.Messaggio;
+            Prodotto ogg = JsonConvert.DeserializeObject<Prodotto>(fileJSON);
+
+
+            SqlConnection connDb = new SqlConnection();
+            SqlCommand sql = new SqlCommand();
+
+            string riga;
+
+            connDb.ConnectionString = "Data Source =(LocalDB)\\MSSQLLocalDB;"
+                + " AttachDbFileName = |DataDirectory|magazzino.mdf";
+
         }
 
 
