@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net;
 using Newtonsoft.Json;
-using System.Data.SqlClient;
+using GestioneDatabases;
 
 namespace ServerGestioneMagazzino
 {
@@ -34,14 +34,47 @@ namespace ServerGestioneMagazzino
             //Il dns ottiene il nome dell'host della macchine in locale
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[5];
-            //ottiene l'indirizzo ip della macchina e la sua relativa port           
+            //ottiene l'indirizzo ip della macchina e la sua relativa port  
+            
+            //prove
+            string utenti = "";
+            using (System.IO.StreamReader sr = new System.IO.StreamReader(@"jsonfile.txt"))
+            {
+                utenti = sr.ReadToEnd();
+            }
 
+            string operazioni = "";
+            using (System.IO.StreamReader sr = new System.IO.StreamReader(@"operazioneProva.txt"))
+            {
+                operazioni = sr.ReadToEnd();
+            }
+
+            //da mettere in un metodo
+            ProtocolloComune prot = new ProtocolloComune(database);
+            prot.MexJson = utenti;
+            prot.ConversioneMessaggio();
+            txtIterazione.Text = prot._feedback;
+            prot.InstauraConnessioneDatabase();
+            txtIterazione.Text = prot._feedback;
+
+            
+
+            prot.MexJson = operazioni;
+            prot.ConversioneMessaggio();
+            txtIterazione.Text += "\n----------------------------";
+            txtIterazione.Text += prot._feedback;
+            prot.InstauraConnessioneDatabase();
+            txtIterazione.Text += prot._feedback;
+            txtIterazione.ScrollToEnd();
+
+            //per visualizzare le operazioni in una tabella
+            dtaOperazioneEffettuate.DataContext = prot.GetTableOperazioni().DefaultView;
 
             //Server s = new Server(22, ipAddress);
             //s.Initialize();
             //s.StartListening();
-          
-           
+
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -80,8 +113,6 @@ namespace ServerGestioneMagazzino
             {
                 try
                 {
-                    database.IniziaConessione();
-                    grpAutenticazione.Visibility = Visibility.Hidden;
                     grpAutenticazione.IsEnabled = false;
                     btnStart.IsEnabled = true;
                     MessageBox.Show("Connessione avvenuta con successo");
