@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtocolloGenerale;
 using GestioneDatabases;
+using System.Security.Cryptography;
+using System.Text;
 
 
 namespace ServerGestioneMagazzino
@@ -31,6 +33,21 @@ namespace ServerGestioneMagazzino
         public Risposta Risposta { get; set; }
 
         public Utente UtenteCorrente { get; private set; }
+
+        
+        public string calcoloSHA256(string passwd)
+        {
+            using (SHA256 hash = SHA256.Create())
+            {
+                byte[] bytes = hash.ComputeHash(Encoding.UTF8.GetBytes(passwd));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
 
         public void ConversioneMessaggio()
         {
@@ -82,6 +99,7 @@ namespace ServerGestioneMagazzino
             if (Database.VerificaEsistenzaDato(queryUtente))
             {
                 _feedback += "\nUtente esistente\nVerificazione Password";
+                u.Password = calcoloSHA256(u.Password);
                 string queryPass = $"SELECT [Nome Utente] FROM Utenti WHERE Utente = '{u.IDUtente}' AND Password = '{u.Password}';";
                 if (Database.VerificaEsistenzaDato(queryPass))
                 {
