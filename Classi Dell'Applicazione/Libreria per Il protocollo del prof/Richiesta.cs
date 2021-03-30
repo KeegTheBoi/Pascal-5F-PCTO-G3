@@ -33,5 +33,7 @@ namespace ProtocolloGenerale
         public int NuovoRuolo { get; set; }
 
         public int Ruolo { get; set; }
+
+
     }
 }

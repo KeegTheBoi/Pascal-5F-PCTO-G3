@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ProtocolloGenerale
 {
-    class Storico
+    public class Storico
     {
     }
 }

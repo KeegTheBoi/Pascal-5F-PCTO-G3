@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ProtocolloGenerale
 {
-    class GestioneProdotto : Operazione
+    public class GestioneProdotto
     {
-        public GestioneProdotto(int cod, string nome, int quantita, string codProd) : base (cod)
+        public GestioneProdotto(string nome, int quantita, string codProd)
         {
             NomeProdotto = nome;
             QuantitaProdotti = quantita;

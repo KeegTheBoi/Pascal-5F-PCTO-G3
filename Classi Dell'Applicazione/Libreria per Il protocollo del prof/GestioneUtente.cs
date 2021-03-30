@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ProtocolloGenerale
 {
-    class GestioneUtente : Operazione
+    public class GestioneUtente
     {
-        public GestioneUtente(int codOp, string codUtente, string nomeUtente, string password, string ruolo) : base(codOp)
+        public GestioneUtente(string codUtente, string nomeUtente, string password, string ruolo)
         {
             IDUtente = codUtente;
             Nome = nomeUtente;
@@ -20,6 +20,8 @@ namespace ProtocolloGenerale
 
         public string Password {get; set;}
 
-        int Ruolo { get; set; }
+        string Ruolo { get; set; }
+
+
     }
 }
