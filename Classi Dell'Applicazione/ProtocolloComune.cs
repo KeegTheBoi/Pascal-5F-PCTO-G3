@@ -121,22 +121,34 @@ namespace ServerGestioneMagazzino
 
         }
 
-        public Risposta ElencodiOperazioniDisponibili()
+        public Risposta ElencodiOperazioniDisponibili(int ruolo)
         {
             string queryOpers = $"SELECT * FROM OperazioniPossibili;";
             DataTable tabellaOperazioni = Database.VisualizzazioneTabella(queryOpers);
 
             //Lista di operazioni possibili
             List<OperazionePossibile> listOperazioni = new List<OperazionePossibile>();
+            int i = 0;
             foreach (DataRow record in tabellaOperazioni.Rows)
             {
-                //Selezione dei vari dati della specifica colonna e conversione
-                int codOpe = int.Parse(record.ItemArray[0].ToString());
-                bool carico = bool.Parse(record.ItemArray[1].ToString());
-                string descri = (string)record.ItemArray[2];
-                listOperazioni.Add(new OperazionePossibile(codOpe, carico, descri));
+                if (ruolo == 1 && i < 12)
+                {
+                    //Selezione dei vari dati della specifica colonna e conversione
+                    int codOpe = int.Parse(record.ItemArray[0].ToString());
+                    bool carico = bool.Parse(record.ItemArray[1].ToString());
+                    string descri = (string)record.ItemArray[2];
+                    listOperazioni.Add(new OperazionePossibile(codOpe, carico, descri));
+                }
+                else if(ruolo=0 && i>=12)
+                {
+                    //Selezione dei vari dati della specifica colonna e conversione
+                    int codOpe = int.Parse(record.ItemArray[0].ToString());
+                    bool carico = bool.Parse(record.ItemArray[1].ToString());
+                    string descri = (string)record.ItemArray[2];
+                    listOperazioni.Add(new OperazionePossibile(codOpe, carico, descri));
+                }
+                i++;
             }
-
             //Creazione della risposta da serielizzare
             return new ElencoOperazioni("", listOperazioni.ToArray());
             //da immettere un messaggio di feedback positivo
@@ -155,7 +167,7 @@ namespace ServerGestioneMagazzino
                         {
                             UtenteCorrente = (Utente)TipoRichiesta();
                             _feedback += "\n[Server] Invio elenco di operazioni effettuabili";
-                            Risposta = ElencodiOperazioniDisponibili();
+                            Risposta = ElencodiOperazioniDisponibili(UtenteCorrente.Ruolo);
                         }
                     }
                     else if (TipoRichiesta().GetType() == typeof(Operazione))
@@ -235,6 +247,30 @@ namespace ServerGestioneMagazzino
             else
             {
                 throw new Exception("Identificativo operazione inesistente");
+            }
+        }
+
+        public void AggiungiUtente(Richiesta r)
+        {
+            GestioneUtente g = new GestioneUtente(r.CodiceOperazione, r.NuovoIDUtente, r.NomeUtente, r.NuovaPassword, r.NuovoRuolo);
+            string selecet = $"SELECT * FROM Utenti WHERE IDUtente = '{g.IDUtente}'";
+            if (!Database.VerificaEsistenzaDato(select))
+            {
+                string inserMov = $"INSERT INTO Utenti(IDUtente, [Nome Utente], Password, Ruolo ) VALUES ('{g.IDUtente}', {g.Nome}, '{g.Password}', {g.Ruolo});";
+                Database.InserimentoDati(inserMov);
+            }
+            else
+                throw new Exception("IDUtente già esistente");
+        }
+
+        public void RimuoviUtente(Richiesta r)
+        {
+            GestioneUtente g = new GestioneUtente(r.CodiceOperazione, r.NuovoIDUtente, null, null, null);
+            string selecet = $"SELECT * FROM Utenti WHERE IDUtente = '{g.IDUtente}'";
+            if (Database.VerificaEsistenzaDato(select))
+            {
+                string inserMov = $"DELETE FROM Utenti WHERE IDUtente='{IDUtente}'";
+                Database.InserimentoDati(inserMov);//
             }
         }
 

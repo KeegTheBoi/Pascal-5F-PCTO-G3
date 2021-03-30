@@ -20,8 +20,6 @@ namespace ProtocolloGenerale
 
         public string Password {get; set;}
 
-        string Ruolo { get; set; }
-
-
+        int Ruolo { get; set; }
     }
 }
