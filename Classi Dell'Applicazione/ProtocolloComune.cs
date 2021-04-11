@@ -337,6 +337,31 @@ namespace ServerGestioneMagazzino
 
     public static class Azioni
     {
+        public static List<Movimento> VisualizzaStorico(this Utente ut, SqlDatabase database, int scelta)
+        {
+            string query = "";
+            if (scelta == 1)
+            {
+                query = $"SELECT IDEffettuazioniOperazioni,BarCode,CodOperazione,CodUtente,Quantità,Carico FROM StoricoOperazioni AS SO INNER JOIN OperazioniPossibili AS OP ON SO.CodOperazione = OP.IDOperazione WHERE CodOperazione = 1 OR CodOperazione = 2 OR CodOperazione = 4 OR CodOperazione <= 5 OR CodOperazione = 11;";
+            }
+            else if (scelta == 2)
+            {
+                query = $"SELECT IDEffettuazioniOperazioni,BarCode,CodOperazione,CodUtente,Quantità,Carico FROM StoricoOperazioni AS SO INNER JOIN OperazioniPossibili AS OP ON SO.CodOperazione = OP.IDOperazione WHERE (CodOperazione >= 6 AND CodOperazione <= 10) OR CodOperazione = 12;";
+            }
+            else if (scelta == 3)
+            {
+                query = $"SELECT IDEffettuazioniOperazioni,BarCode,CodOperazione,CodUtente,Quantità,Carico FROM StoricoOperazioni AS SO INNER JOIN OperazioniPossibili AS OP ON SO.CodOperazione = OP.IDOperazione WHERE CodOperazione=3;";
+            }
+            DataTable tabella = database.VisualizzazioneTabella(query);
+            List<Movimento> listaMovimento = new List<Movimento>();
+            for (int i = 0; i < tabella.Rows.Count; i++)
+            {
+                DataRow dt = tabella.Rows[i];
+                listaMovimento.Add(new Movimento(dt.ItemArray[3].ToString(), dt.ItemArray[1].ToString(), bool.Parse(dt.ItemArray[5].ToString()), int.Parse(dt.ItemArray[4].ToString()), int.Parse(dt.ItemArray[0].ToString()), int.Parse(dt.ItemArray[2].ToString())));
+            }
+            return listaMovimento;
+        }
+
         static public void AggiungiUtente(this Utente ut, SqlDatabase database, GestioneUtente newUtente)
         {
 
