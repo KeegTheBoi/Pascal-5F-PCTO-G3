@@ -335,6 +335,25 @@ namespace ServerGestioneMagazzino
         }
     }
 
+    public class Movimento
+    {
+        public Movimento(string IDU, String IDP, bool c, int quan, int IDE, int C)
+        {
+            IDUtente = IDU;
+            IDProdotto = IDP;
+            Carico = c;
+            Quantità = quan;
+            IDEffettuazioniOperazioni = IDE;
+            CodOperazione = C;
+        }
+        int CodOperazione { get; set; }
+        string IDUtente { get; set; }
+        string IDProdotto { get; set; }
+        bool Carico { get; set; }
+        int Quantità { get; set; }
+        int IDEffettuazioniOperazioni { get; set; }
+    }
+
     public static class Azioni
     {
         public static List<Movimento> VisualizzaStorico(this Utente ut, SqlDatabase database, int scelta)
