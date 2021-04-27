@@ -20,7 +20,7 @@ using ProtocolloGenerale;
 namespace ServerGestioneMagazzino
 {
     /// <summary>
-    /// Logica di interazione per MainWindow.xaml     
+    ///  Keegan Carlo Falcao, Guglielmi Juri, Piscaglia Katia 5F    
     /// </summary>
     public partial class MainWindow : Window
     {
